@@ -22,15 +22,17 @@ public abstract class Account {
     @ManyToOne
     private AccountHolder secondaryOwner;
     @Embedded
-    @AttributeOverrides({  //se soluciona Overriding los nombres de las columnas en la BD
+    @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "penalty_fee"))
     })
     private Money penaltyFee;
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Account(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status) {
-        this.id = id;
+    public Account() {
+    }
+
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status) {
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;

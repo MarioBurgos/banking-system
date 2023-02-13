@@ -20,8 +20,11 @@ public class CreditCard extends Account {
     })
     private Money interestRate;
 
-    public CreditCard(Long id, Money balance, AccountHolder primaryOwner,AccountHolder secondaryOwner, Money penaltyFee, Status status, Money creditLimit, Money interestRate) {
-        super(id, balance, primaryOwner, secondaryOwner, penaltyFee, status);
+    public CreditCard() {
+    }
+
+    public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, Money creditLimit, Money interestRate) {
+        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
         this.creditLimit = creditLimit;
         this.interestRate = interestRate;
     }

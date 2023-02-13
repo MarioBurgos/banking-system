@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class AccountHolder extends User{
@@ -24,11 +23,15 @@ public class AccountHolder extends User{
     @OneToMany(mappedBy = "primaryOwner")
     private List<Account> accounts;
 
-    public AccountHolder(String name, Date dateOfBirth, Address primaryAddress, Address mailingAddress) {
+    public AccountHolder() {
+    }
+
+    public AccountHolder(String name, Date dateOfBirth, Address primaryAddress, Address mailingAddress, List<Account> accounts) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
+        this.accounts = accounts;
     }
 
     public String getName() {

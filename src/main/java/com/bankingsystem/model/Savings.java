@@ -29,8 +29,11 @@ public class Savings extends Account {
     })
     private Money interestRate;
 
-    public Savings(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate, Money interestRate) {
-        super(id, balance, primaryOwner, secondaryOwner, penaltyFee, status);
+    public Savings() {
+    }
+
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate, Money interestRate) {
+        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
         this.secretKey = secretKey;
         this.minimumBalance = minimumBalance;
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;

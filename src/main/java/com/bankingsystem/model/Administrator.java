@@ -7,6 +7,10 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "id")
 public class Administrator extends User{
     private String name;
+
+    public Administrator() {
+    }
+
     public Administrator(String name) {
         this.name = name;
     }

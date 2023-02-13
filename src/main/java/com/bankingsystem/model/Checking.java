@@ -23,8 +23,11 @@ public class Checking extends Account {
     private Money monthlyMaintenanceFee;
     private Date creationDate;
 
-    public Checking(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate) {
-        super(id, balance, primaryOwner, secondaryOwner, penaltyFee, status);
+    public Checking() {
+    }
+
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate) {
+        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
         this.secretKey = secretKey;
         this.minimumBalance = minimumBalance;
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;

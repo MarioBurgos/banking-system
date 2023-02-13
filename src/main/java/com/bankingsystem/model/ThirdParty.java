@@ -9,6 +9,9 @@ public class ThirdParty extends User{
     private String hashedKey;
     private String hashedName;
 
+    public ThirdParty() {
+    }
+
     public ThirdParty(String hashedKey, String hashedName) {
         this.hashedKey = hashedKey;
         this.hashedName = hashedName;
