@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 public class Money {
     private BigDecimal amount;
 
+    public Money() {
+    }
+
     public Money(BigDecimal amount) {
         this.amount = amount;
     }
