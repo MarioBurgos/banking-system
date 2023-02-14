@@ -8,6 +8,8 @@ import jakarta.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -49,20 +51,9 @@ public class Savings extends Account {
     }
 
     /**
-     * Checks the difference of currentDate and lastInterestDate.  If the difference is greater than a year, returns true
+     * Checks whether the current balance is less than the minimum balance or not.
+     * In affirmative case -> subtracts the penalty fee
      */
-    private boolean isYearHasPassed() {
-        // a year in millis = 31556952000L
-        Date currentDate = new Date(new java.util.Date().getTime());
-        if (currentDate.getTime() - lastInterestDate.getTime() > 31556952000L) {
-            lastInterestDate = currentDate;
-            return true;
-        }
-        return false;
-    }
-
-    /** Checks whether the current balance is less than the minimum balance or not.
-    In affirmative case -> subtracts the penalty fee*/
     @Override
     public void setBalance(Money balance) {
         // todo check this function because it's not subtracting penalty fee
@@ -76,13 +67,25 @@ public class Savings extends Account {
         }
     }
 
-    /** Gets the balance, checking if it needs to add interests */
+    /**
+     * Gets the balance, checking if it needs to add interests
+     */
     @Override
     public Money getBalance() {
-        BigDecimal balanceInterests = super.getBalance().getAmount().multiply(interestRate).setScale(4, RoundingMode.HALF_EVEN);
-        if (isYearHasPassed()) {
-            setBalance(new Money(super.getBalance().getAmount().add(balanceInterests)));
+
+        // Check the difference in years between now and lastInterestDate
+        Period diff = Period.between(lastInterestDate.toLocalDate(), LocalDate.now());
+        Integer yearsBetween = diff.getYears();
+        // calculate interests of each year
+        for (int i = 0; i < yearsBetween; i++) {
+            BigDecimal balanceInterestsForOneYear = super.getBalance().getAmount().multiply(interestRate).setScale(4, RoundingMode.HALF_EVEN);
+            super.setBalance(new Money(super.getBalance().getAmount().add(balanceInterestsForOneYear)));
         }
+        // set add years to lastInterestDate and set the value
+        LocalDate localLastInterestDate = lastInterestDate.toLocalDate().plusYears(yearsBetween);
+        setLastInterestDate(Date.valueOf(localLastInterestDate));
+
+        // and obviously, return the new balance plus interests
         return super.getBalance();
     }
 

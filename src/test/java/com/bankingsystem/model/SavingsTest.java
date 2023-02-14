@@ -1,21 +1,20 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SavingsTest {
 
     private Savings savingsAccount;
-    BigDecimal initialBalance, interestRate, penaltyFee, balanceLessThanMinimum;
+    BigDecimal initialBalance, balanceLessThanMinimum;
     @BeforeEach
     void setUp() {
         initialBalance = new BigDecimal("2000");
@@ -25,20 +24,27 @@ class SavingsTest {
 
     @Test
     void getBalance_AYearHasPassed_BalancePlusInterests(){
-        long yearAndAHalf = 31556952000L + (31556952000L/2);
-        // check initial balance
-        assertEquals(initialBalance, savingsAccount.getBalance().getAmount());
-        // simulate creationDate -1 year
-        savingsAccount.setCreationDate(new Date(savingsAccount.getCreationDate().getTime() - yearAndAHalf));
-        // set last interest date to -1 year too
-        savingsAccount.setLastInterestDate(new Date(savingsAccount.getCreationDate().getTime()));
+        // set creationDate -1 year
+        LocalDate oneYearBefore = savingsAccount.getCreationDate().toLocalDate().minusYears(1);
+        savingsAccount.setCreationDate(Date.valueOf(oneYearBefore));
+        savingsAccount.setLastInterestDate(Date.valueOf(oneYearBefore));
         BigDecimal balancePlusInterests = initialBalance.add(initialBalance.multiply(savingsAccount.getInterestRate()));
         assertEquals(balancePlusInterests, savingsAccount.getBalance().getAmount());
     }
     @Test
-    void getBalance_AYearHasNotPassedYet_BalanceWithoutInterests() {
-        // check initial balance
-        assertEquals(initialBalance, savingsAccount.getBalance().getAmount());
+    void getBalance_TwoYearsHavePassed_BalancePlusInterests(){
+        // set creationDate -2 years
+        LocalDate TwoYearsBefore = savingsAccount.getCreationDate().toLocalDate().minusYears(2);
+        savingsAccount.setCreationDate(Date.valueOf(TwoYearsBefore));
+        // set lastInterestDate -2 years
+        savingsAccount.setLastInterestDate(Date.valueOf(TwoYearsBefore));
+
+        for (int i = 0; i < 2; i++) {
+            BigDecimal balancePlusInterests = initialBalance.add(initialBalance.multiply(savingsAccount.getInterestRate()));
+            initialBalance = balancePlusInterests;
+        }
+        assertEquals(initialBalance.setScale(4, RoundingMode.HALF_EVEN), savingsAccount.getBalance().getAmount());
+        assertTrue(savingsAccount.getCreationDate().before(new Date(new java.util.Date().getTime())));
     }
     @Test
     void setBalance_BalanceIsLessThanMinimumBalance_PenaltyFeeIsApplied() {
