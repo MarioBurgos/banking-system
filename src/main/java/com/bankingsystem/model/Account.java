@@ -5,7 +5,6 @@ import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

@@ -1,7 +1,6 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
-import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
