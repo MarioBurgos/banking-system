@@ -4,6 +4,7 @@ import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Entity
@@ -13,7 +14,7 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
-    @AttributeOverrides({  //se soluciona Overriding los nombres de las columnas en la BD
+    @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "balance"))
     })
     private Money balance;
@@ -33,6 +34,13 @@ public abstract class Account {
     }
 
     public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status) {
+        if (this instanceof Savings){
+            if (balance.getAmount().compareTo(new BigDecimal(100)) == -1 &&
+                    balance.getAmount().compareTo(new BigDecimal(1000)) == 1){
+                throw new IllegalArgumentException("Saving accounts must have a starting minimum balance between 100 and 1000");
+            }
+        }
+
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;

@@ -4,8 +4,8 @@ import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Optional;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -24,7 +24,7 @@ public class Savings extends Account {
     private Money monthlyMaintenanceFee;
     private Date creationDate;
     @Embedded
-    @AttributeOverrides({  //se soluciona Overriding los nombres de las columnas en la BD
+    @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "interest_rate"))
     })
     private Money interestRate;
@@ -40,6 +40,13 @@ public class Savings extends Account {
         this.creationDate = creationDate;
         this.interestRate = interestRate;
     }
+
+//    public void setDefaultInterestRate(){
+//        this.interestRate = new BigDecimal("0.0025");
+//    }
+//    public void setDefaultMinimumBalance(){
+//        this.minimumBalance = new BigDecimal("1000");
+//    }
 
     public String getSecretKey() {
         return secretKey;
@@ -78,6 +85,9 @@ public class Savings extends Account {
     }
 
     public void setInterestRate(Money interestRate) {
-        this.interestRate = interestRate;
+        BigDecimal maximumInterestRate = new BigDecimal("0.5");
+        if (interestRate.getAmount().compareTo(maximumInterestRate) > 0){
+            this.interestRate = new Money(maximumInterestRate);
+        }
     }
 }

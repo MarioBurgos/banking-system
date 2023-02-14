@@ -4,6 +4,7 @@ import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity

@@ -4,18 +4,19 @@ import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class CreditCard extends Account {
     @Embedded
-    @AttributeOverrides({  //se soluciona Overriding los nombres de las columnas en la BD
+    @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "credit_limit"))
     })
     private Money creditLimit;
     @Embedded
-    @AttributeOverrides({  //se soluciona Overriding los nombres de las columnas en la BD
+    @AttributeOverrides({
             @AttributeOverride(name = "amount", column = @Column(name = "interest_rate"))
     })
     private Money interestRate;
