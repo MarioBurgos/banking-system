@@ -43,6 +43,14 @@ public class Savings extends Account {
             super.setBalance(balance);
         }
     }
+    public Money getBalance(){
+        if (creationDate.getTime() > creationDate.getTime() + 31536 * 1000000){
+            super.setBalance(new Money(
+                    super.getBalance().getAmount().add(
+                            super.getBalance().getAmount().multiply(interestRate))));
+        }
+        return super.getBalance();
+    }
 
     public String getSecretKey() {
         return secretKey;
