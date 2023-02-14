@@ -13,39 +13,28 @@ public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "balance"))
-    })
+
     private Money balance;
     @ManyToOne
     private AccountHolder primaryOwner;
     @ManyToOne
     private AccountHolder secondaryOwner;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "penalty_fee"))
-    })
-    private Money penaltyFee;
+    private final BigDecimal penaltyFee;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     public Account() {
+        balance = new Money(new BigDecimal("0"));
+        penaltyFee = new BigDecimal("40");
+        status = Status.ACTIVE;
     }
 
-    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status) {
-        if (this instanceof Savings){
-            if (balance.getAmount().compareTo(new BigDecimal(100)) == -1 &&
-                    balance.getAmount().compareTo(new BigDecimal(1000)) == 1){
-                throw new IllegalArgumentException("Saving accounts must have a starting minimum balance between 100 and 1000");
-            }
-        }
-
-        this.balance = balance;
+    public Account(AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        balance = new Money(new BigDecimal("0"));
+        penaltyFee = new BigDecimal("40");
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
-        this.penaltyFee = penaltyFee;
-        this.status = status;
+
     }
 
     public Long getId() {
@@ -80,12 +69,8 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
-    public Money getPenaltyFee() {
+    public BigDecimal getPenaltyFee() {
         return penaltyFee;
-    }
-
-    public void setPenaltyFee(Money penaltyFee) {
-        this.penaltyFee = penaltyFee;
     }
 
     public Status getStatus() {

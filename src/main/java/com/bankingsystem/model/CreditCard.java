@@ -3,46 +3,44 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class CreditCard extends Account {
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "credit_limit"))
-    })
-    private Money creditLimit;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "interest_rate"))
-    })
-    private Money interestRate;
+    @DecimalMin(value = "100")
+    @DecimalMax(value = "100000")
+    private BigDecimal creditLimit;
+    @DecimalMin(value = "0.1")
+    @DecimalMax(value = "0.2")
+    private BigDecimal interestRate;
 
     public CreditCard() {
+        creditLimit = new BigDecimal("100");
     }
 
-    public CreditCard(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, Money creditLimit, Money interestRate) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
-        this.creditLimit = creditLimit;
+    public CreditCard(AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate) {
+        super(primaryOwner, secondaryOwner);
         this.interestRate = interestRate;
+        creditLimit = new BigDecimal("100");
     }
 
-    public Money getCreditLimit() {
+    public BigDecimal getCreditLimit() {
         return creditLimit;
     }
 
-    public void setCreditLimit(Money creditLimit) {
+    public void setCreditLimit(BigDecimal creditLimit) {
         this.creditLimit = creditLimit;
     }
 
-    public Money getInterestRate() {
+    public BigDecimal getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(Money interestRate) {
+    public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
     }
 }

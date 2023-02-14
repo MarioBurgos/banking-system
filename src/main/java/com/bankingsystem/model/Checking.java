@@ -12,27 +12,22 @@ import java.sql.Date;
 public class Checking extends Account {
 
     private String secretKey;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance"))
-    })
-    private Money minimumBalance;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "monthly_maintenance_fee"))
-    })
-    private Money monthlyMaintenanceFee;
+    private final BigDecimal minimumBalance;
+    private final BigDecimal monthlyMaintenanceFee;
     private Date creationDate;
 
     public Checking() {
+        creationDate = new Date(System.currentTimeMillis());
+        minimumBalance = new BigDecimal("250");
+        monthlyMaintenanceFee = new BigDecimal("12");
     }
 
-    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
+    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
-        this.minimumBalance = minimumBalance;
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
-        this.creationDate = creationDate;
+        creationDate = new Date(System.currentTimeMillis());
+        minimumBalance = new BigDecimal("250");
+        monthlyMaintenanceFee = new BigDecimal("12");
     }
 
     public String getSecretKey() {
@@ -43,20 +38,12 @@ public class Checking extends Account {
         this.secretKey = secretKey;
     }
 
-    public Money getMinimumBalance() {
+    public BigDecimal getMinimumBalance() {
         return minimumBalance;
     }
 
-    public void setMinimumBalance(Money minimumBalance) {
-        this.minimumBalance = minimumBalance;
-    }
-
-    public Money getMonthlyMaintenanceFee() {
+    public BigDecimal getMonthlyMaintenanceFee() {
         return monthlyMaintenanceFee;
-    }
-
-    public void setMonthlyMaintenanceFee(Money monthlyMaintenanceFee) {
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
     public Date getCreationDate() {

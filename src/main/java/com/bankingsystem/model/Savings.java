@@ -3,8 +3,11 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Date;
 
 @Entity
@@ -12,41 +15,27 @@ import java.sql.Date;
 public class Savings extends Account {
 
     private String secretKey;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "minimum_balance"))
-    })
-    private Money minimumBalance;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "monthly_maintenance_fee"))
-    })
-    private Money monthlyMaintenanceFee;
+
+    private final BigDecimal minimumBalance;
+    private BigDecimal monthlyMaintenanceFee;
     private Date creationDate;
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "amount", column = @Column(name = "interest_rate"))
-    })
-    private Money interestRate;
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "0.5")
+    private BigDecimal interestRate;
 
     public Savings() {
+        this.minimumBalance = new BigDecimal("1000");
+        this.interestRate = new BigDecimal("0.0025").setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, Money penaltyFee, Status status, String secretKey, Money minimumBalance, Money monthlyMaintenanceFee, Date creationDate, Money interestRate) {
-        super(balance, primaryOwner, secondaryOwner, penaltyFee, status);
+    public Savings(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal monthlyMaintenanceFee) {
+        super(primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
-        this.minimumBalance = minimumBalance;
+        this.minimumBalance = new BigDecimal("1000");
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;
-        this.creationDate = creationDate;
-        this.interestRate = interestRate;
+        creationDate = new Date(System.currentTimeMillis());
+        interestRate = new BigDecimal("0.0025").setScale(2, RoundingMode.HALF_EVEN);
     }
-
-//    public void setDefaultInterestRate(){
-//        this.interestRate = new BigDecimal("0.0025");
-//    }
-//    public void setDefaultMinimumBalance(){
-//        this.minimumBalance = new BigDecimal("1000");
-//    }
 
     public String getSecretKey() {
         return secretKey;
@@ -56,19 +45,15 @@ public class Savings extends Account {
         this.secretKey = secretKey;
     }
 
-    public Money getMinimumBalance() {
+    public BigDecimal getMinimumBalance() {
         return minimumBalance;
     }
 
-    public void setMinimumBalance(Money minimumBalance) {
-        this.minimumBalance = minimumBalance;
-    }
-
-    public Money getMonthlyMaintenanceFee() {
+    public BigDecimal getMonthlyMaintenanceFee() {
         return monthlyMaintenanceFee;
     }
 
-    public void setMonthlyMaintenanceFee(Money monthlyMaintenanceFee) {
+    public void setMonthlyMaintenanceFee(BigDecimal monthlyMaintenanceFee) {
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
@@ -80,14 +65,11 @@ public class Savings extends Account {
         this.creationDate = creationDate;
     }
 
-    public Money getInterestRate() {
+    public BigDecimal getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(Money interestRate) {
-        BigDecimal maximumInterestRate = new BigDecimal("0.5");
-        if (interestRate.getAmount().compareTo(maximumInterestRate) > 0){
-            this.interestRate = new Money(maximumInterestRate);
-        }
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
     }
 }
