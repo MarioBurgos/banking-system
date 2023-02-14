@@ -18,7 +18,7 @@ class SavingsTest {
     @BeforeEach
     void setUp() {
         initialBalance = new BigDecimal("2000");
-        balanceLessThanMinimum = new BigDecimal("500");
+        balanceLessThanMinimum = new BigDecimal("600");
         savingsAccount = new Savings(new Money(initialBalance), null, null, null, null);
     }
 
@@ -32,14 +32,14 @@ class SavingsTest {
         assertEquals(balancePlusInterests, savingsAccount.getBalance().getAmount());
     }
     @Test
-    void getBalance_TwoYearsHavePassed_BalancePlusInterests(){
+    void getBalance_ThreeYearsHavePassed_BalancePlusInterests(){
         // set creationDate -2 years
-        LocalDate TwoYearsBefore = savingsAccount.getCreationDate().toLocalDate().minusYears(2);
-        savingsAccount.setCreationDate(Date.valueOf(TwoYearsBefore));
+        LocalDate threeYearsBefore = savingsAccount.getCreationDate().toLocalDate().minusYears(3);
+        savingsAccount.setCreationDate(Date.valueOf(threeYearsBefore));
         // set lastInterestDate -2 years
-        savingsAccount.setLastInterestDate(Date.valueOf(TwoYearsBefore));
+        savingsAccount.setLastInterestDate(Date.valueOf(threeYearsBefore));
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             BigDecimal balancePlusInterests = initialBalance.add(initialBalance.multiply(savingsAccount.getInterestRate()));
             initialBalance = balancePlusInterests;
         }

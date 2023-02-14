@@ -54,13 +54,12 @@ public class Savings extends Account {
      * Checks whether the current balance is less than the minimum balance or not.
      * In affirmative case -> subtracts the penalty fee
      */
-    @Override
-    public void setBalance(Money balance) {
-        // todo check this function because it's not subtracting penalty fee
 
-        BigDecimal currentBalance = super.getBalance().getAmount();
-        if (currentBalance.compareTo(minimumBalance) < 0) {
-            BigDecimal balanceMinusPenaltyFee = super.getBalance().getAmount().subtract(super.getPenaltyFee());
+    public void setBalance(Money balance) {
+        super.setBalance(balance);
+        // todo check this function because it's not subtracting penalty fee
+        if (super.getBalance().getAmount().compareTo(minimumBalance) < 0) {
+            BigDecimal balanceMinusPenaltyFee = getBalance().getAmount().subtract(super.getPenaltyFee());
             super.setBalance(new Money(balanceMinusPenaltyFee));
         } else {
             super.setBalance(balance);
