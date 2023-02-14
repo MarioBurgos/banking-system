@@ -10,7 +10,6 @@ import java.sql.Date;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Checking extends Account {
-
     private String secretKey;
     private final BigDecimal minimumBalance;
     private final BigDecimal monthlyMaintenanceFee;
@@ -30,6 +29,13 @@ public class Checking extends Account {
         monthlyMaintenanceFee = new BigDecimal("12");
     }
 
+    public void setBalance(Money balance){
+        if (super.getBalance().getAmount().compareTo(minimumBalance) == -1){
+            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
+        }else {
+            super.setBalance(balance);
+        }
+    }
     public String getSecretKey() {
         return secretKey;
     }

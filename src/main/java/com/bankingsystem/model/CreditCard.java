@@ -27,6 +27,13 @@ public class CreditCard extends Account {
         this.interestRate = interestRate;
         creditLimit = new BigDecimal("100");
     }
+    public void setBalance(Money balance){
+        if (super.getBalance().getAmount().compareTo(new BigDecimal("0")) == -1){
+            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
+        }else {
+            super.setBalance(balance);
+        }
+    }
 
     public BigDecimal getCreditLimit() {
         return creditLimit;

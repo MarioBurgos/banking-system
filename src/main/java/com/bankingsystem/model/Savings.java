@@ -37,6 +37,14 @@ public class Savings extends Account {
         interestRate = new BigDecimal("0.0025").setScale(2, RoundingMode.HALF_EVEN);
     }
 
+    public void setBalance(Money balance){
+        if (super.getBalance().getAmount().compareTo(minimumBalance) == -1){
+            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
+        }else {
+            super.setBalance(balance);
+        }
+    }
+
     public String getSecretKey() {
         return secretKey;
     }

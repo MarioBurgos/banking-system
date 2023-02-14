@@ -22,7 +22,13 @@ public class StudentChecking extends Account {
         this.secretKey = secretKey;
         this.creationDate = new Date(System.currentTimeMillis());
     }
-
+    public void setBalance(Money balance){
+        if (super.getBalance().getAmount().compareTo(new BigDecimal("0")) == -1){
+            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
+        }else {
+            super.setBalance(balance);
+        }
+    }
     public String getSecretKey() {
         return secretKey;
     }
