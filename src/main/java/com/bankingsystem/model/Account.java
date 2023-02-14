@@ -18,6 +18,7 @@ public abstract class Account {
     private AccountHolder primaryOwner;
     @ManyToOne
     private AccountHolder secondaryOwner;
+    @Column(columnDefinition="DECIMAL(19,4)")
     private final BigDecimal penaltyFee;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -28,9 +29,10 @@ public abstract class Account {
         status = Status.ACTIVE;
     }
 
-    public Account(AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-        balance = new Money(new BigDecimal("0"));
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        this.balance = balance;
         penaltyFee = new BigDecimal("40");
+        status = Status.ACTIVE;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
 

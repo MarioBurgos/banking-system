@@ -10,18 +10,21 @@ import java.sql.Date;
 @PrimaryKeyJoinColumn(name = "id")
 public class Checking extends Account {
     private String secretKey;
+    @Column(columnDefinition="DECIMAL(19,4)")
     private final BigDecimal minimumBalance;
+    @Column(columnDefinition="DECIMAL(19,4)")
     private final BigDecimal monthlyMaintenanceFee;
     private Date creationDate;
 
     public Checking() {
+        super();
         creationDate = new Date(System.currentTimeMillis());
         minimumBalance = new BigDecimal("250");
         monthlyMaintenanceFee = new BigDecimal("12");
     }
 
-    public Checking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(primaryOwner, secondaryOwner);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
         creationDate = new Date(System.currentTimeMillis());
         minimumBalance = new BigDecimal("250");

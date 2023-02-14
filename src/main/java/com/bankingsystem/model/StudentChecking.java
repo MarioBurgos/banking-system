@@ -13,11 +13,12 @@ public class StudentChecking extends Account {
     private Date creationDate;
 
     public StudentChecking() {
+        super();
         this.creationDate = new Date(System.currentTimeMillis());
     }
 
-    public StudentChecking(AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
-        super(primaryOwner, secondaryOwner);
+    public StudentChecking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
+        super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
         this.creationDate = new Date(System.currentTimeMillis());
     }
