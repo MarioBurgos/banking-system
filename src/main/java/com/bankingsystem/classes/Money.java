@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 @Embeddable
 public class Money {
+
     private BigDecimal amount;
 
     public Money() {
