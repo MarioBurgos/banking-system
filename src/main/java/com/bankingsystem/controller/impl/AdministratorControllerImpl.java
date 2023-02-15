@@ -3,15 +3,15 @@ package com.bankingsystem.controller.impl;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.controller.interfaces.AdministratorController;
 import com.bankingsystem.dto.AccountDTO;
-import com.bankingsystem.model.Account;
+import com.bankingsystem.dto.BalanceDTO;
+import com.bankingsystem.dto.ThirdPartyDTO;
+import com.bankingsystem.model.ThirdParty;
 import com.bankingsystem.service.interfaces.AdministratorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,7 +21,7 @@ public class AdministratorControllerImpl implements AdministratorController {
     private AdministratorService administratorService;
 
     @GetMapping("/accounts")
-    public Map<Long, AccountDTO> findAllAccounts(){
+    public Map<Long, AccountDTO> findAllAccounts() {
         return administratorService.findAllAccounts();
     }
 
@@ -31,7 +31,14 @@ public class AdministratorControllerImpl implements AdministratorController {
     }
 
     @PatchMapping("/accounts/{id}/balance")
-    public void updateBalance(Account account, Money amount) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateBalance(@PathVariable(name = "id") Long accountId, @RequestBody BalanceDTO balanceDTO) {
+        administratorService.updateBalance(accountId, balanceDTO);
+    }
 
+    @PostMapping("/thirdparty")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ThirdParty addThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) {
+        return administratorService.addThirdParty(thirdPartyDTO);
     }
 }

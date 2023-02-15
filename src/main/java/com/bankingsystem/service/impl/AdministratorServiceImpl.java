@@ -1,17 +1,19 @@
 package com.bankingsystem.service.impl;
 
+import com.auth0.jwt.algorithms.Algorithm;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.dto.AccountDTO;
+import com.bankingsystem.dto.BalanceDTO;
+import com.bankingsystem.dto.ThirdPartyDTO;
 import com.bankingsystem.model.*;
 import com.bankingsystem.repository.*;
 import com.bankingsystem.service.interfaces.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AdministratorServiceImpl implements AdministratorService {
@@ -23,6 +25,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     private StudentCheckingRepository studentCheckingRepository;
     @Autowired
     private CreditCardRepository creditCardRepository;
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
     @Override
     public Map<Long, AccountDTO> findAllAccounts() {
         Map<Long, AccountDTO> dtoMap = new HashMap<>();
@@ -107,23 +111,44 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public void updateBalance(Long accountId, Money amount) {
+    public void updateBalance(Long accountId, BalanceDTO balanceDTO) {
         AccountDTO dto = new AccountDTO();
-        Map<Long, AccountDTO> accountDTOS = findAllAccounts();
-        dto = accountDTOS.get(accountId);
+        Map<Long, AccountDTO> dtoMap = findAllAccounts();
+        dto = dtoMap.get(accountId);
+        switch (dto.getAccountType()){
+            case "SAVINGS_ACCOUNT"-> {
+                Optional<Savings> account = savingsRepository.findById(accountId);
+                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
+                account.get().setBalance(new Money(balanceDTO.getAmount()));
+                savingsRepository.save(account.get());
+            }
+            case "CHECKING_ACCOUNT"-> {
+                Optional<Checking> account = checkingRepository.findById(accountId);
+                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
+                account.get().setBalance(new Money(balanceDTO.getAmount()));
+                checkingRepository.save(account.get());
+            }
+            case "STUDENT_CHECKING_ACCOUNT"-> {
+                Optional<StudentChecking> account = studentCheckingRepository.findById(accountId);
+                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
+                account.get().setBalance(new Money(balanceDTO.getAmount()));
+                studentCheckingRepository.save(account.get());
+            }
+            case "CREDIT_CARD"-> {
+                Optional<CreditCard> account = creditCardRepository.findById(accountId);
+                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
+                account.get().setBalance(new Money(balanceDTO.getAmount()));
+                creditCardRepository.save(account.get());
+            }
+        }
     }
 
-//    @Override
-//    public User createAccount() {
-//        return null;
-//    }
-//    @Override
-//    public Money checkBalance(Account account) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void updateBalance(Account account, Money amount) {
-//
-//    }
+    @Override
+    public ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) {
+        Algorithm hashedName = Algorithm.HMAC256(thirdPartyDTO.getName().getBytes());
+        Algorithm hashedKey = Algorithm.HMAC256(thirdPartyDTO.getKey().getBytes());
+        ThirdParty newThirdParty = new ThirdParty(hashedName.toString(), hashedKey.toString());
+        return newThirdParty;
+    }
+
 }
