@@ -19,8 +19,8 @@ public class Savings extends Account {
 
     @Column(columnDefinition = "DECIMAL(19,4)")
     private final BigDecimal minimumBalance;
-    @Column(columnDefinition = "DECIMAL(19,4)")
-    private BigDecimal monthlyMaintenanceFee;
+//    @Column(columnDefinition = "DECIMAL(19,4)")
+//    private BigDecimal monthlyMaintenanceFee;
     private Date creationDate;
     @DecimalMin(value = "0")
     @DecimalMax(value = "0.5")
@@ -37,11 +37,10 @@ public class Savings extends Account {
 
     }
 
-    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey, BigDecimal monthlyMaintenanceFee) {
+    public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
         super(balance, primaryOwner, secondaryOwner);
         this.secretKey = secretKey;
         this.minimumBalance = new BigDecimal("1000");
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
         creationDate = new Date(System.currentTimeMillis());
         lastInterestDate = creationDate;
         interestRate = new BigDecimal("0.0025").setScale(4, RoundingMode.HALF_EVEN);
@@ -106,14 +105,6 @@ public class Savings extends Account {
 
     public BigDecimal getMinimumBalance() {
         return minimumBalance;
-    }
-
-    public BigDecimal getMonthlyMaintenanceFee() {
-        return monthlyMaintenanceFee;
-    }
-
-    public void setMonthlyMaintenanceFee(BigDecimal monthlyMaintenanceFee) {
-        this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
     public Date getCreationDate() {

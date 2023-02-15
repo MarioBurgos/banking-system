@@ -13,6 +13,10 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "balance"))
+    })
     private Money balance;
     @ManyToOne
     private AccountHolder primaryOwner;
@@ -20,19 +24,16 @@ public abstract class Account {
     private AccountHolder secondaryOwner;
     @Column(columnDefinition="DECIMAL(19,4)")
     private final BigDecimal penaltyFee;
-    @Enumerated(EnumType.STRING)
-    private Status status;
+
 
     public Account() {
         balance = new Money(new BigDecimal("0"));
         penaltyFee = new BigDecimal("40");
-        status = Status.ACTIVE;
     }
 
     public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.balance = balance;
         penaltyFee = new BigDecimal("40");
-        status = Status.ACTIVE;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
 
@@ -72,13 +73,5 @@ public abstract class Account {
 
     public BigDecimal getPenaltyFee() {
         return penaltyFee;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

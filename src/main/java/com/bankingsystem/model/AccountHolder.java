@@ -1,6 +1,7 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -21,6 +22,7 @@ public class AccountHolder extends User{
     })
     private Address mailingAddress;
     @OneToMany(mappedBy = "primaryOwner")
+    @JsonIgnore
     private List<Account> accounts;
 
     public AccountHolder() {

@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 public class CreditCard extends Account {
     @DecimalMin(value = "100")
     @DecimalMax(value = "100000")
-    @Column(columnDefinition="DECIMAL(19,4)")
+    @Column(columnDefinition = "DECIMAL(19,4)")
     private BigDecimal creditLimit;
     @DecimalMin(value = "0.1")
     @DecimalMax(value = "0.2")
-    @Column(columnDefinition="DECIMAL(19,4)")
+    @Column(columnDefinition = "DECIMAL(19,4)")
     private BigDecimal interestRate;
 
     public CreditCard() {
@@ -29,21 +29,14 @@ public class CreditCard extends Account {
         this.interestRate = interestRate;
         creditLimit = new BigDecimal("100");
     }
-    public void setBalance(Money balance){
-        if (super.getBalance().getAmount().compareTo(new BigDecimal("0")) == -1){
-            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
-        }else {
-            super.setBalance(balance);
-        }
+
+    public void setBalance(Money balance) {
+        super.setBalance(balance);
     }
-//    public Money getBalance(){
-//        if (creationDate.getTime() > creationDate.getTime() + 31536 * 1000000){
-//            super.setBalance(new Money(
-//                    super.getBalance().getAmount().add(
-//                            super.getBalance().getAmount().multiply(interestRate))));
-//        }
-//        return super.getBalance();
-//    }
+
+    public Money getBalance() {
+        return super.getBalance();
+    }
 
     public BigDecimal getCreditLimit() {
         return creditLimit;
