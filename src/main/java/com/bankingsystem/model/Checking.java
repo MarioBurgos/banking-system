@@ -32,8 +32,10 @@ public class Checking extends Account {
     }
 
     public void setBalance(Money balance){
+        super.setBalance(balance);
         if (super.getBalance().getAmount().compareTo(minimumBalance) == -1){
-            super.setBalance(new Money(super.getBalance().getAmount().subtract(super.getPenaltyFee())));
+            BigDecimal balanceMinusPenaltyFee = getBalance().getAmount().subtract(super.getPenaltyFee());
+            super.setBalance(new Money(balanceMinusPenaltyFee));
         }else {
             super.setBalance(balance);
         }
