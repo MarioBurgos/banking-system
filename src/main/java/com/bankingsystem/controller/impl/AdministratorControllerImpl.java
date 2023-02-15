@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @RestController
@@ -38,7 +39,7 @@ public class AdministratorControllerImpl implements AdministratorController {
 
     @PostMapping("/thirdparty")
     @ResponseStatus(HttpStatus.CREATED)
-    public ThirdParty addThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) {
+    public ThirdParty addThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
         return administratorService.addThirdParty(thirdPartyDTO);
     }
 }

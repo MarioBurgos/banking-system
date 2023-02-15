@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
@@ -144,10 +147,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) {
-        Algorithm hashedName = Algorithm.HMAC256(thirdPartyDTO.getName().getBytes());
-        Algorithm hashedKey = Algorithm.HMAC256(thirdPartyDTO.getKey().getBytes());
+    public ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashedName = digest.digest(thirdPartyDTO.getName().getBytes(StandardCharsets.UTF_8));
+        byte[] hashedKey = digest.digest(thirdPartyDTO.getKey().getBytes(StandardCharsets.UTF_8));
         ThirdParty newThirdParty = new ThirdParty(hashedName.toString(), hashedKey.toString());
+        thirdPartyRepository.save(newThirdParty);
         return newThirdParty;
     }
 
