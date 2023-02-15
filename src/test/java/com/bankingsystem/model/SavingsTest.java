@@ -19,7 +19,7 @@ class SavingsTest {
     void setUp() {
         initialBalance = new BigDecimal("2000");
         balanceLessThanMinimum = new BigDecimal("600");
-        savingsAccount = new Savings(new Money(initialBalance), null, null, null, null);
+        savingsAccount = new Savings(new Money(initialBalance), null, null, null);
     }
 
     @Test
