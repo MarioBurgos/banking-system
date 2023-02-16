@@ -3,15 +3,13 @@ package com.bankingsystem.controller.impl;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.controller.interfaces.AccountHolderController;
 import com.bankingsystem.dto.BalanceDTO;
-import com.bankingsystem.model.Account;
 import com.bankingsystem.service.interfaces.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AccountHolderControllerImpl implements AccountHolderController {
@@ -23,7 +21,8 @@ public class AccountHolderControllerImpl implements AccountHolderController {
     }
 
     @PatchMapping("account-holder/{account-holder-id}/accounts/{account-id}/transfer")
-    public void transfer(Account account, Money amount, String beneficiaryName, Long beneficiaryId) {
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void transfer(@PathVariable(name = "account-holder-id") Long accountHolderId, @PathVariable(name = "account-id") Long accountId, @RequestParam String amount, @RequestParam("beneficiary-name") Optional<String> beneficiaryName, @RequestParam("beneficiary-account-id") Optional<Long> beneficiaryAccountId) {
+        accountHolderService.transfer(accountHolderId, accountId, amount, beneficiaryName, beneficiaryAccountId);
     }
 }

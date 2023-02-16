@@ -5,9 +5,10 @@ import com.bankingsystem.dto.BalanceDTO;
 import com.bankingsystem.model.Account;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountHolderService {
     List<BalanceDTO> checkBalance(Long accountHolderId);
-    void transfer(Account account, Money amount, String beneficiaryName, Long beneficiaryId);
+    void transfer(Long accountHolderId, Long accountId, String amount, Optional<String> beneficiaryName, Optional<Long> beneficiaryAccountId);
 
 }
