@@ -2,11 +2,14 @@ package com.bankingsystem.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class ThirdParty extends BankingUser {
+    @NotBlank
     private String hashedKey;
+    @NotBlank
     private String hashedName;
 
     public ThirdParty() {

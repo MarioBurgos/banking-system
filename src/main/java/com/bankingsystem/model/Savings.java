@@ -3,8 +3,7 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,17 +14,17 @@ import java.time.Period;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Savings extends Account {
-
+    @NotBlank
     private String secretKey;
-
     @Column(columnDefinition = "DECIMAL(19,4)")
+    @Positive
     private final BigDecimal minimumBalance;
-//    @Column(columnDefinition = "DECIMAL(19,4)")
-//    private BigDecimal monthlyMaintenanceFee;
+    @PastOrPresent
     private Date creationDate;
     @DecimalMin(value = "0")
     @DecimalMax(value = "0.5")
     @Column(columnDefinition = "DECIMAL(19,4)")
+    @Positive
     private BigDecimal interestRate;
     private Date lastInterestDate;
     @Enumerated(EnumType.STRING)

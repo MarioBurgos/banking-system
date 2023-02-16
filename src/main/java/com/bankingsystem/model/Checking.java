@@ -3,6 +3,7 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -10,13 +11,18 @@ import java.sql.Date;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class Checking extends Account {
+    @NotBlank
     private String secretKey;
     @Column(columnDefinition="DECIMAL(19,4)")
+    @Positive
     private final BigDecimal minimumBalance;
     @Column(columnDefinition="DECIMAL(19,4)")
+    @Positive
     private final BigDecimal monthlyMaintenanceFee;
+    @PastOrPresent
     private Date creationDate;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Status status;
 
     public Checking() {

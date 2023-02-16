@@ -3,6 +3,8 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -10,7 +12,9 @@ import java.sql.Date;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class StudentChecking extends Account {
+    @NotBlank
     private String secretKey;
+    @PastOrPresent
     private Date creationDate;
     @Enumerated(EnumType.STRING)
     private Status status;

@@ -3,6 +3,7 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -19,6 +20,7 @@ public abstract class Account {
     })
     private Money balance;
     @ManyToOne
+    @NotNull
     private AccountHolder primaryOwner;
     @ManyToOne
     private AccountHolder secondaryOwner;

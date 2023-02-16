@@ -3,15 +3,20 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 
 import java.sql.Date;
 import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
 public class AccountHolder extends BankingUser {
+    @NotBlank
     private String name;
+    @Past
     private Date dateOfBirth;
     @Embedded
+    @NotBlank
     private Address primaryAddress;
     @Embedded
     @AttributeOverrides({
