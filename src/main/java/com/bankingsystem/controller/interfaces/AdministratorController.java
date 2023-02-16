@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface AdministratorController {
-    Map<Long, AccountDTO> findAllAccounts();
+//    Map<Long, AccountDTO> findAllAccounts();
     Money checkBalance(Long accountId);
     void updateBalance(Long accountId, BalanceDTO balanceDTO);
     ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException;

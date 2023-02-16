@@ -21,10 +21,10 @@ public class AdministratorControllerImpl implements AdministratorController {
     @Autowired
     private AdministratorService administratorService;
 
-    @GetMapping("/accounts")
-    public Map<Long, AccountDTO> findAllAccounts() {
-        return administratorService.findAllAccounts();
-    }
+//    @GetMapping("/accounts")
+//    public Map<Long, AccountDTO> findAllAccounts() {
+//        return administratorService.findAllAccounts();
+//    }
 
     @GetMapping("/accounts/{id}/balance")
     public Money checkBalance(@PathVariable(name = "id") Long accountId) {
