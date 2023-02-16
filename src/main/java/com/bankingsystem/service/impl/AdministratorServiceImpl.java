@@ -31,22 +31,30 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     private ThirdPartyRepository thirdPartyRepository;
     @Override
-    public Money checkBalance(Long accountId) {
+    public BalanceDTO checkBalance(Long accountId) {
         BalanceDTO dto = new BalanceDTO();
         Optional<Savings> optionalSavings = savingsRepository.findById(accountId);
         Optional<Checking> optionalChecking = checkingRepository.findById(accountId);
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(accountId);
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(accountId);
         if (optionalSavings.isPresent()){
+            dto.setAccountId(optionalSavings.get().getId());
+            dto.setAccountType("SAVINGS_ACCOUNT");
             dto.setAmount(optionalSavings.get().getBalance().getAmount());/***/
         } else if (optionalChecking.isPresent()) {
+            dto.setAccountId(optionalChecking.get().getId());
+            dto.setAccountType("CHECKING_ACCOUNT");
             dto.setAmount(optionalChecking.get().getBalance().getAmount());
         } else if (optionalStudentChecking.isPresent()) {
+            dto.setAccountId(optionalStudentChecking.get().getId());
+            dto.setAccountType("STUDENT_CHECKING_ACCOUNT");
             dto.setAmount(optionalStudentChecking.get().getBalance().getAmount());
         }else if (optionalCreditCard.isPresent()){
+            dto.setAccountId(optionalCreditCard.get().getId());
+            dto.setAccountType("CREDIT_CARD_ACCOUNT");
             dto.setAmount(optionalCreditCard.get().getBalance().getAmount());
         }
-        return new Money(dto.getAmount());
+        return dto;
     }
 
     @Override

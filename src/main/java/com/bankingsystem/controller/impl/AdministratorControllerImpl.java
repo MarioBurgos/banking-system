@@ -27,7 +27,7 @@ public class AdministratorControllerImpl implements AdministratorController {
 //    }
 
     @GetMapping("/accounts/{id}/balance")
-    public Money checkBalance(@PathVariable(name = "id") Long accountId) {
+    public BalanceDTO checkBalance(@PathVariable(name = "id") Long accountId) {
         return administratorService.checkBalance(accountId);
     }
 
