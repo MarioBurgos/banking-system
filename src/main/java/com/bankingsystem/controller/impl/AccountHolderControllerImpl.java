@@ -22,7 +22,7 @@ public class AccountHolderControllerImpl implements AccountHolderController {
 
     @PatchMapping("account-holder/{account-holder-id}/accounts/{account-id}/transfer")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void transfer(@PathVariable(name = "account-holder-id") Long accountHolderId, @PathVariable(name = "account-id") Long accountId, @RequestParam String amount, @RequestParam("beneficiary-name") Optional<String> beneficiaryName, @RequestParam("beneficiary-account-id") Optional<Long> beneficiaryAccountId) {
+    public void transfer(@PathVariable(name = "account-holder-id") Long accountHolderId, @PathVariable(name = "account-id") Long accountId, @RequestParam String amount, @RequestParam(name = "beneficiary-name", required = false) Optional<String> beneficiaryName, @RequestParam(name = "beneficiary-account-id", required = false) Optional<Long> beneficiaryAccountId) {
         accountHolderService.transfer(accountHolderId, accountId, amount, beneficiaryName, beneficiaryAccountId);
     }
 }

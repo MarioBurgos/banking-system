@@ -33,10 +33,10 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         BalanceDTO balanceDTO;
         List<BalanceDTO> dtos = new ArrayList<>();
         Optional<AccountHolder> optionalAccountHolder = accountHolderRepository.findById(accountHolderId);
-        List<Savings> optionalSavings = savingsRepository.findByAccountHolderId(accountHolderId);
-        List<Checking> optionalChecking = checkingRepository.findByAccountHolderId(accountHolderId);
-        List<StudentChecking> optionalStudentChecking = studentCheckingRepository.findByAccountHolderId(accountHolderId);
-        List<CreditCard> optionalCreditCard = creditCardRepository.findByAccountHolderId(accountHolderId);
+        List<Savings> optionalSavings = savingsRepository.findByPrimaryOwner(accountHolderId);
+        List<Checking> optionalChecking = checkingRepository.findByPrimaryOwner(accountHolderId);
+        List<StudentChecking> optionalStudentChecking = studentCheckingRepository.findByPrimaryOwner(accountHolderId);
+        List<CreditCard> optionalCreditCard = creditCardRepository.findByPrimaryOwner(accountHolderId);
         if (optionalSavings.size() > 0) {
             for (Savings s : optionalSavings) {
                 balanceDTO = new BalanceDTO();
@@ -138,23 +138,23 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 optionalCreditCardBeneficiary.get().setBalance(new Money(optionalCreditCardBeneficiary.get().getBalance().getAmount().add(amountBigDecimal)));
                 creditCardRepository.save(optionalCreditCardBeneficiary.get());
             }
-        }else if (beneficiaryName.isPresent()){ // find out beneficiary's account type by accountHolder name
-            savingsBeneficiaryList = savingsRepository.findByAccountHolderName(beneficiaryName.get());
-            checkingBeneficiaryList = checkingRepository.findByAccountHolderName(beneficiaryName.get());
-            studentCheckingBeneficiaryList = studentCheckingRepository.findByAccountHolderName(beneficiaryName.get());
-            creditCardBeneficiaryList = creditCardRepository.findByAccountHolderName(beneficiaryName.get());
+        }  else if (beneficiaryName.isPresent()){ // find out beneficiary's account type by accountHolder name
+            savingsBeneficiaryList = savingsRepository.findByPrimaryOwnerName(beneficiaryName.get());
+            checkingBeneficiaryList = checkingRepository.findByPrimaryOwnerName(beneficiaryName.get());
+            studentCheckingBeneficiaryList = studentCheckingRepository.findByPrimaryOwnerName(beneficiaryName.get());
+            creditCardBeneficiaryList = creditCardRepository.findByPrimaryOwnerName(beneficiaryName.get());
             // then add the amount to the first account
             if (savingsBeneficiaryList.size() > 0){
                 savingsBeneficiaryList.get(0).setBalance(new Money(savingsBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 savingsRepository.save(savingsBeneficiaryList.get(0));
             } else if (checkingBeneficiaryList.size() > 0) {
-                checkingBeneficiaryList.get(0).setBalance(new Money(savingsBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
+                checkingBeneficiaryList.get(0).setBalance(new Money(checkingBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 checkingRepository.save(checkingBeneficiaryList.get(0));
             } else if (studentCheckingBeneficiaryList.size() > 0) {
-                studentCheckingBeneficiaryList.get(0).setBalance(new Money(savingsBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
+                studentCheckingBeneficiaryList.get(0).setBalance(new Money(studentCheckingBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 studentCheckingRepository.save(studentCheckingBeneficiaryList.get(0));
             } else if (creditCardBeneficiaryList.size() > 0) {
-                creditCardBeneficiaryList.get(0).setBalance(new Money(savingsBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
+                creditCardBeneficiaryList.get(0).setBalance(new Money(creditCardBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 creditCardRepository.save(creditCardBeneficiaryList.get(0));
             }
         }else {
