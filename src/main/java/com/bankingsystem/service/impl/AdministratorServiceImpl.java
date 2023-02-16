@@ -107,42 +107,41 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Money checkBalance(Long accountId) {
-        AccountDTO dto = new AccountDTO();
-        Map<Long, AccountDTO> accountDTOS = findAllAccounts();
-        dto = accountDTOS.get(accountId);
-        return dto.getBalance();
+        BalanceDTO dto = new BalanceDTO();
+        Optional<Savings> optionalSavings = savingsRepository.findById(accountId);
+        Optional<Checking> optionalChecking = checkingRepository.findById(accountId);
+        Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(accountId);
+        Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(accountId);
+        if (optionalSavings.isPresent()){
+            dto.setAmount(optionalSavings.get().getBalance().getAmount());/***/
+        } else if (optionalChecking.isPresent()) {
+            dto.setAmount(optionalChecking.get().getBalance().getAmount());
+        } else if (optionalStudentChecking.isPresent()) {
+            dto.setAmount(optionalStudentChecking.get().getBalance().getAmount());
+        }else if (optionalCreditCard.isPresent()){
+            dto.setAmount(optionalCreditCard.get().getBalance().getAmount());
+        }
+        return new Money(dto.getAmount());
     }
 
     @Override
     public void updateBalance(Long accountId, BalanceDTO balanceDTO) {
-        AccountDTO dto = new AccountDTO();
-        Map<Long, AccountDTO> dtoMap = findAllAccounts();
-        dto = dtoMap.get(accountId);
-        switch (dto.getAccountType()){
-            case "SAVINGS_ACCOUNT"-> {
-                Optional<Savings> account = savingsRepository.findById(accountId);
-                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
-                account.get().setBalance(new Money(balanceDTO.getAmount()));
-                savingsRepository.save(account.get());
-            }
-            case "CHECKING_ACCOUNT"-> {
-                Optional<Checking> account = checkingRepository.findById(accountId);
-                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
-                account.get().setBalance(new Money(balanceDTO.getAmount()));
-                checkingRepository.save(account.get());
-            }
-            case "STUDENT_CHECKING_ACCOUNT"-> {
-                Optional<StudentChecking> account = studentCheckingRepository.findById(accountId);
-                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
-                account.get().setBalance(new Money(balanceDTO.getAmount()));
-                studentCheckingRepository.save(account.get());
-            }
-            case "CREDIT_CARD"-> {
-                Optional<CreditCard> account = creditCardRepository.findById(accountId);
-                if(!account.isPresent()){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found.");}
-                account.get().setBalance(new Money(balanceDTO.getAmount()));
-                creditCardRepository.save(account.get());
-            }
+        Optional<Savings> optionalSavings = savingsRepository.findById(accountId);
+        Optional<Checking> optionalChecking = checkingRepository.findById(accountId);
+        Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(accountId);
+        Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(accountId);
+        if (optionalSavings.isPresent()){
+            optionalSavings.get().setBalance(new Money(balanceDTO.getAmount()));
+            savingsRepository.save(optionalSavings.get());
+        } else if (optionalChecking.isPresent()) {
+            optionalChecking.get().setBalance(new Money(balanceDTO.getAmount()));
+            checkingRepository.save(optionalChecking.get());
+        } else if (optionalStudentChecking.isPresent()) {
+            optionalStudentChecking.get().setBalance(new Money(balanceDTO.getAmount()));
+            studentCheckingRepository.save(optionalStudentChecking.get());
+        }else if (optionalCreditCard.isPresent()){
+            optionalCreditCard.get().setBalance(new Money(balanceDTO.getAmount()));
+            creditCardRepository.save(optionalCreditCard.get());
         }
     }
 
