@@ -2,6 +2,7 @@ package com.bankingsystem.repository;
 
 import com.bankingsystem.model.Checking;
 import com.bankingsystem.model.Savings;
+import com.bankingsystem.model.StudentChecking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SavingsRepository extends JpaRepository<Savings,Long> {
+public interface SavingsRepository extends JpaRepository<Savings, Long> {
 
-    @Query("SELECT s FROM Savings s WHERE s.primaryOwner.id = :id OR s.secondaryOwner.id = :id" )
-    List<Savings> findByAccountHolderId(@Param("id") Long id);
-    @Query("SELECT s FROM Savings s WHERE s.primaryOwner.name = :name OR s.secondaryOwner.name = :name" )
-    List<Savings> findByAccountHolderName(@Param("name") String name);
+    List<Savings> findByPrimaryOwner(Long id);
+
+    List<Savings> findByPrimaryOwnerName(String name);
+
+
 }

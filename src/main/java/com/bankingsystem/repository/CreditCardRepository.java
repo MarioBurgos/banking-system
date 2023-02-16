@@ -2,6 +2,7 @@ package com.bankingsystem.repository;
 
 import com.bankingsystem.model.Checking;
 import com.bankingsystem.model.CreditCard;
+import com.bankingsystem.model.StudentChecking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Repository
 public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
-    @Query("SELECT c FROM CreditCard c WHERE c.primaryOwner.id = :id OR c.secondaryOwner.id = :id" )
-    List<CreditCard> findByAccountHolderId(@Param("id") Long id);
-    @Query("SELECT c FROM CreditCard c WHERE c.primaryOwner.name = :name OR c.secondaryOwner.name = :name" )
-    List<CreditCard> findByAccountHolderName(@Param("name") String name);
+    List<CreditCard> findByPrimaryOwner(Long id);
+
+    List<CreditCard> findByPrimaryOwnerName(String name);
+
 }
