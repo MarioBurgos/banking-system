@@ -151,7 +151,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
 //        byte[] hashedName = digest.digest(thirdPartyDTO.getName().getBytes(StandardCharsets.UTF_8));
         byte[] hashedKey = digest.digest(thirdPartyDTO.getKey().getBytes(StandardCharsets.UTF_8));
-        ThirdParty newThirdParty = new ThirdParty(thirdPartyDTO.getName(), hashedKey.toString());
+        ThirdParty newThirdParty = new ThirdParty(hashedKey.toString(), thirdPartyDTO.getName());
         thirdPartyRepository.save(newThirdParty);
         return newThirdParty;
     }

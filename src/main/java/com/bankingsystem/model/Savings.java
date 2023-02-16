@@ -1,6 +1,7 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
+import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -27,6 +28,9 @@ public class Savings extends Account {
     @Column(columnDefinition = "DECIMAL(19,4)")
     private BigDecimal interestRate;
     private Date lastInterestDate;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 
     public Savings() {
         super();
@@ -34,7 +38,7 @@ public class Savings extends Account {
         lastInterestDate = creationDate;
         this.minimumBalance = new BigDecimal("1000");
         this.interestRate = new BigDecimal("0.0025").setScale(4, RoundingMode.HALF_EVEN);
-
+        status = Status.ACTIVE;
     }
 
     public Savings(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner, String secretKey) {
@@ -43,6 +47,7 @@ public class Savings extends Account {
         this.minimumBalance = new BigDecimal("1000");
         creationDate = new Date(System.currentTimeMillis());
         lastInterestDate = creationDate;
+        status = Status.ACTIVE;
         interestRate = new BigDecimal("0.0025").setScale(4, RoundingMode.HALF_EVEN);
         if (super.getBalance().getAmount().compareTo(minimumBalance) == -1) {
             throw new IllegalArgumentException("Balance in Savings account must be equals or greater than 1000");
@@ -121,5 +126,13 @@ public class Savings extends Account {
 
     public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

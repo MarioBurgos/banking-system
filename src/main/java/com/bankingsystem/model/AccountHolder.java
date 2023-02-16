@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
-public class AccountHolder extends User{
+public class AccountHolder extends BankingUser {
     private String name;
     private Date dateOfBirth;
     @Embedded

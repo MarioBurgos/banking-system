@@ -5,7 +5,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
-public class ThirdParty extends User{
+public class ThirdParty extends BankingUser {
     private String hashedKey;
     private String hashedName;
 
