@@ -2,10 +2,7 @@ package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
@@ -15,10 +12,14 @@ public class CreditCard extends Account {
     @DecimalMin(value = "100")
     @DecimalMax(value = "100000")
     @Column(columnDefinition = "DECIMAL(19,4)")
+    @Positive
+    @NotNull
     private BigDecimal creditLimit;
     @DecimalMin(value = "0.1")
     @DecimalMax(value = "0.2")
     @Column(columnDefinition = "DECIMAL(19,4)")
+    @Positive
+    @NotNull
     private BigDecimal interestRate;
 
     public CreditCard() {

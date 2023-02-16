@@ -4,6 +4,7 @@ import com.bankingsystem.classes.Money;
 import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 import java.math.BigDecimal;
@@ -14,8 +15,10 @@ import java.sql.Date;
 public class StudentChecking extends Account {
     @NotBlank
     private String secretKey;
+    //    @PastOrPresent
     private Date creationDate;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Status status;
 
     public StudentChecking() {
