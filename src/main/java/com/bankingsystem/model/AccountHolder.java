@@ -3,9 +3,7 @@ package com.bankingsystem.model;
 import com.bankingsystem.classes.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -14,6 +12,8 @@ import java.util.List;
 public class AccountHolder extends BankingUser {
     @NotBlank
     private String name;
+//    @PastOrPresent
+    @NotNull
     private Date dateOfBirth;
     @Embedded
     @NotNull
