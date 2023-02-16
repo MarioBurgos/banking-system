@@ -12,4 +12,6 @@ import java.util.List;
 public interface CheckingRepository extends JpaRepository<Checking, Long> {
     @Query("SELECT c FROM Checking c WHERE c.primaryOwner.id = :id OR c.secondaryOwner.id = :id" )
     List<Checking> findByAccountHolderId(@Param("id") Long id);
+    @Query("SELECT c FROM Checking c WHERE c.primaryOwner.name = :name OR c.secondaryOwner.name = :name" )
+    List<Checking> findByAccountHolderName(@Param("name") String name);
 }

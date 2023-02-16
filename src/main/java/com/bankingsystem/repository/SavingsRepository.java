@@ -1,5 +1,6 @@
 package com.bankingsystem.repository;
 
+import com.bankingsystem.model.Checking;
 import com.bankingsystem.model.Savings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,8 @@ import java.util.List;
 @Repository
 public interface SavingsRepository extends JpaRepository<Savings,Long> {
 
-
     @Query("SELECT s FROM Savings s WHERE s.primaryOwner.id = :id OR s.secondaryOwner.id = :id" )
     List<Savings> findByAccountHolderId(@Param("id") Long id);
+    @Query("SELECT s FROM Savings s WHERE s.primaryOwner.name = :name OR s.secondaryOwner.name = :name" )
+    List<Savings> findByAccountHolderName(@Param("name") String name);
 }
