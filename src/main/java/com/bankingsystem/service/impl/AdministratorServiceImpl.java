@@ -31,81 +31,6 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Autowired
     private ThirdPartyRepository thirdPartyRepository;
     @Override
-    public Map<Long, AccountDTO> findAllAccounts() {
-        Map<Long, AccountDTO> dtoMap = new HashMap<>();
-        List<AccountDTO> accountDTOS = new ArrayList<>();
-        List<Savings> savings = savingsRepository.findAll();
-        List<Checking> checkings = checkingRepository.findAll();
-        List<StudentChecking> studentCheckings = studentCheckingRepository.findAll();
-        List<CreditCard> creditCards = creditCardRepository.findAll();
-
-        for (Savings item: savings) {
-            AccountDTO dto = new AccountDTO();
-            dto.setAccountType("SAVINGS_ACCOUNT");
-            dto.setId(item.getId());/***/
-            dto.setBalance(item.getBalance());/***/
-            dto.setPrimaryOwner(item.getPrimaryOwner());/***/
-            dto.setSecondaryOwner(item.getSecondaryOwner());/***/
-            dto.setPenaltyFee(item.getPenaltyFee());/***/
-            dto.setMinimumBalance(item.getMinimumBalance());//
-            dto.setInterestRate(item.getInterestRate());//
-            dto.setMonthlyMaintenanceFee(null);
-            dto.setCreditLimit(null);
-            dto.setCreationDate(item.getCreationDate());//
-            dto.setLastInterestDate(item.getLastInterestDate());//
-            dto.setStatus(null);
-            accountDTOS.add(dto);
-        }
-        for (Checking item: checkings) {
-            AccountDTO dto = new AccountDTO();
-            dto.setAccountType("CHECKING_ACCOUNT");
-            dto.setId(item.getId());
-            dto.setBalance(item.getBalance());
-            dto.setPrimaryOwner(item.getPrimaryOwner());
-            dto.setSecondaryOwner(item.getSecondaryOwner());
-            dto.setPenaltyFee(item.getPenaltyFee());
-            dto.setMinimumBalance(item.getMinimumBalance());
-            dto.setMonthlyMaintenanceFee(item.getMonthlyMaintenanceFee());
-            dto.setCreationDate(item.getCreationDate());
-            dto.setStatus(item.getStatus());
-            accountDTOS.add(dto);
-        }
-        for (StudentChecking item: studentCheckings) {
-            AccountDTO dto = new AccountDTO();
-            dto.setAccountType("STUDENT_CHECKING_ACCOUNT");
-            dto.setId(item.getId());
-            dto.setBalance(item.getBalance());
-            dto.setPrimaryOwner(item.getPrimaryOwner());
-            dto.setSecondaryOwner(item.getSecondaryOwner());
-            dto.setPenaltyFee(item.getPenaltyFee());
-            dto.setCreationDate(item.getCreationDate());
-            dto.setStatus(item.getStatus());
-            accountDTOS.add(dto);
-        }
-        for (CreditCard item: creditCards) {
-            AccountDTO dto = new AccountDTO();
-            dto.setAccountType("CREDIT_CARD");
-            dto.setId(item.getId());
-            dto.setBalance(item.getBalance());
-            dto.setPrimaryOwner(item.getPrimaryOwner());
-            dto.setSecondaryOwner(item.getSecondaryOwner());
-            dto.setPenaltyFee(item.getPenaltyFee());
-//            dto.setMinimumBalance(item.getMinimumBalance());
-            dto.setInterestRate(item.getInterestRate());
-//            dto.setMonthlyMaintenanceFee(item.getMonthlyMaintenanceFee());
-            dto.setCreditLimit(item.getCreditLimit());
-//            dto.setCreationDate(item.getCreationDate());
-//            dto.setLastInterestDate(item.getLastInterestDate());
-//            dto.setStatus(item.getStatus());
-            accountDTOS.add(dto);
-        }
-        for (AccountDTO dto: accountDTOS) {
-            dtoMap.put(dto.getId(), dto);
-        }
-        return dtoMap;
-    }
-
-    @Override
     public Money checkBalance(Long accountId) {
         BalanceDTO dto = new BalanceDTO();
         Optional<Savings> optionalSavings = savingsRepository.findById(accountId);
@@ -154,5 +79,78 @@ public class AdministratorServiceImpl implements AdministratorService {
         thirdPartyRepository.save(newThirdParty);
         return newThirdParty;
     }
-
+//    @Override
+//    public Map<Long, AccountDTO> findAllAccounts() {
+//        Map<Long, AccountDTO> dtoMap = new HashMap<>();
+//        List<AccountDTO> accountDTOS = new ArrayList<>();
+//        List<Savings> savings = savingsRepository.findAll();
+//        List<Checking> checkings = checkingRepository.findAll();
+//        List<StudentChecking> studentCheckings = studentCheckingRepository.findAll();
+//        List<CreditCard> creditCards = creditCardRepository.findAll();
+//
+//        for (Savings item: savings) {
+//            AccountDTO dto = new AccountDTO();
+//            dto.setAccountType("SAVINGS_ACCOUNT");
+//            dto.setId(item.getId());/***/
+//            dto.setBalance(item.getBalance());/***/
+//            dto.setPrimaryOwner(item.getPrimaryOwner());/***/
+//            dto.setSecondaryOwner(item.getSecondaryOwner());/***/
+//            dto.setPenaltyFee(item.getPenaltyFee());/***/
+//            dto.setMinimumBalance(item.getMinimumBalance());//
+//            dto.setInterestRate(item.getInterestRate());//
+//            dto.setMonthlyMaintenanceFee(null);
+//            dto.setCreditLimit(null);
+//            dto.setCreationDate(item.getCreationDate());//
+//            dto.setLastInterestDate(item.getLastInterestDate());//
+//            dto.setStatus(null);
+//            accountDTOS.add(dto);
+//        }
+//        for (Checking item: checkings) {
+//            AccountDTO dto = new AccountDTO();
+//            dto.setAccountType("CHECKING_ACCOUNT");
+//            dto.setId(item.getId());
+//            dto.setBalance(item.getBalance());
+//            dto.setPrimaryOwner(item.getPrimaryOwner());
+//            dto.setSecondaryOwner(item.getSecondaryOwner());
+//            dto.setPenaltyFee(item.getPenaltyFee());
+//            dto.setMinimumBalance(item.getMinimumBalance());
+//            dto.setMonthlyMaintenanceFee(item.getMonthlyMaintenanceFee());
+//            dto.setCreationDate(item.getCreationDate());
+//            dto.setStatus(item.getStatus());
+//            accountDTOS.add(dto);
+//        }
+//        for (StudentChecking item: studentCheckings) {
+//            AccountDTO dto = new AccountDTO();
+//            dto.setAccountType("STUDENT_CHECKING_ACCOUNT");
+//            dto.setId(item.getId());
+//            dto.setBalance(item.getBalance());
+//            dto.setPrimaryOwner(item.getPrimaryOwner());
+//            dto.setSecondaryOwner(item.getSecondaryOwner());
+//            dto.setPenaltyFee(item.getPenaltyFee());
+//            dto.setCreationDate(item.getCreationDate());
+//            dto.setStatus(item.getStatus());
+//            accountDTOS.add(dto);
+//        }
+//        for (CreditCard item: creditCards) {
+//            AccountDTO dto = new AccountDTO();
+//            dto.setAccountType("CREDIT_CARD");
+//            dto.setId(item.getId());
+//            dto.setBalance(item.getBalance());
+//            dto.setPrimaryOwner(item.getPrimaryOwner());
+//            dto.setSecondaryOwner(item.getSecondaryOwner());
+//            dto.setPenaltyFee(item.getPenaltyFee());
+////            dto.setMinimumBalance(item.getMinimumBalance());
+//            dto.setInterestRate(item.getInterestRate());
+////            dto.setMonthlyMaintenanceFee(item.getMonthlyMaintenanceFee());
+//            dto.setCreditLimit(item.getCreditLimit());
+////            dto.setCreationDate(item.getCreationDate());
+////            dto.setLastInterestDate(item.getLastInterestDate());
+////            dto.setStatus(item.getStatus());
+//            accountDTOS.add(dto);
+//        }
+//        for (AccountDTO dto: accountDTOS) {
+//            dtoMap.put(dto.getId(), dto);
+//        }
+//        return dtoMap;
+//    }
 }
