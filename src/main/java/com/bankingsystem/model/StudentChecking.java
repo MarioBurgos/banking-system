@@ -14,7 +14,6 @@ import java.sql.Date;
 public class StudentChecking extends Account {
     @NotBlank
     private String secretKey;
-    @PastOrPresent
     private Date creationDate;
     @Enumerated(EnumType.STRING)
     private Status status;

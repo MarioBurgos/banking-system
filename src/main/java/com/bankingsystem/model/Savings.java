@@ -17,14 +17,11 @@ public class Savings extends Account {
     @NotBlank
     private String secretKey;
     @Column(columnDefinition = "DECIMAL(19,4)")
-    @Positive
     private final BigDecimal minimumBalance;
-    @PastOrPresent
     private Date creationDate;
     @DecimalMin(value = "0")
     @DecimalMax(value = "0.5")
     @Column(columnDefinition = "DECIMAL(19,4)")
-    @Positive
     private BigDecimal interestRate;
     private Date lastInterestDate;
     @Enumerated(EnumType.STRING)

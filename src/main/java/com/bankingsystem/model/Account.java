@@ -20,7 +20,6 @@ public abstract class Account {
     })
     private Money balance;
     @ManyToOne
-    @NotNull
     private AccountHolder primaryOwner;
     @ManyToOne
     private AccountHolder secondaryOwner;

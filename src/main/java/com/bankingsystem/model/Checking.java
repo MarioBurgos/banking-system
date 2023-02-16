@@ -14,12 +14,9 @@ public class Checking extends Account {
     @NotBlank
     private String secretKey;
     @Column(columnDefinition="DECIMAL(19,4)")
-    @Positive
     private final BigDecimal minimumBalance;
     @Column(columnDefinition="DECIMAL(19,4)")
-    @Positive
     private final BigDecimal monthlyMaintenanceFee;
-    @PastOrPresent
     private Date creationDate;
     @Enumerated(EnumType.STRING)
     @NotNull
