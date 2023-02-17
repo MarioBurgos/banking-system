@@ -1,30 +1,24 @@
-package com.bankingsystem.model;
+package com.bankingsystem.dto;
 
-import jakarta.persistence.*;
+import com.bankingsystem.model.Role;
 
 import java.util.List;
 
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
+
     private Long id;
     private String name;
-    @Column(unique = true)
     private String username;
-    private String password;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
     private List<Role> roles;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(String name, String username, String password) {
+    public UserDTO(Long id, String name, String username, List<Role> roles) {
+        this.id = id;
         this.name = name;
         this.username = username;
-        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -51,14 +45,6 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public List<Role> getRoles() {
         return roles;
     }
@@ -67,5 +53,3 @@ public class User {
         this.roles = roles;
     }
 }
-
-
