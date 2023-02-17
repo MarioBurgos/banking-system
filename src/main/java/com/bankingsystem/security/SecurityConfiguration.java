@@ -50,16 +50,13 @@ public class SecurityConfiguration {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // set up authorization for different request matchers and user roles
         http.authorizeHttpRequests()
-                //.requestMatchers("/login").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/doctors").authenticated() // list doctors
-//                .requestMatchers(HttpMethod.GET, "/doctors/status/*").hasAnyRole("ADMIN", "CONTRIBUTOR") // find doctors by status
-//                .requestMatchers(HttpMethod.GET, "/patients").hasAnyRole("ADMIN", "CONTRIBUTOR") // list patients
-//                .requestMatchers(HttpMethod.POST, "/doctors").hasRole("ADMIN") // add doctors
-//                .requestMatchers(HttpMethod.POST, "/patients").hasAnyRole("CONTRIBUTOR", "ADMIN") // add patients
-//                .requestMatchers(HttpMethod.PATCH, "/doctors/*/status").hasAnyRole("CONTRIBUTOR", "ADMIN") // update doctor status
-//                .requestMatchers(HttpMethod.PATCH, "/doctors/*/department").hasAnyRole("CONTRIBUTOR", "ADMIN") // update doctor department
-//                .requestMatchers(HttpMethod.PUT, "/patients/*").hasAnyRole("CONTRIBUTOR", "ADMIN") // update a patient
-                .anyRequest().permitAll(); //
+                .requestMatchers(HttpMethod.POST, "/thirdparty").hasRole("ADMIN") // Only ADMIN can create new ThirdParty
+                .requestMatchers(HttpMethod.GET, "/accounts/*/balance").hasRole("ADMIN") // ADMIN can see the balance of any account
+                .requestMatchers(HttpMethod.PATCH, "/accounts/*/balance").hasRole("ADMIN") // ADMIN can update the balance of any account
+                .requestMatchers(HttpMethod.GET, "/account-holder/*/balance").hasRole("USER") // USER can see all their accounts balance
+                .requestMatchers(HttpMethod.PATCH, "account-holder/*/accounts/*/transfer").hasRole("USER") // USER can transfer Money to other accounts
+//                .anyRequest().permitAll()
+                ;
 
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);

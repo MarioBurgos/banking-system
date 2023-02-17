@@ -1,5 +1,6 @@
 package com.bankingsystem.filters;
 
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,5 +92,4 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // Writing the token as response
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
-
 }

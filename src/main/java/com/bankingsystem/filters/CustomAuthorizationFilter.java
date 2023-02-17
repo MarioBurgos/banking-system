@@ -1,5 +1,6 @@
 package com.bankingsystem.filters;
 
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -32,6 +33,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
  * authorization of a user to access the API endpoints.
  */
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
