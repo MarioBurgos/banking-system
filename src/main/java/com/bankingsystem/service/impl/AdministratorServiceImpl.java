@@ -1,21 +1,15 @@
 package com.bankingsystem.service.impl;
 
-import com.auth0.jwt.algorithms.Algorithm;
 import com.bankingsystem.classes.Money;
-import com.bankingsystem.dto.AccountDTO;
 import com.bankingsystem.dto.BalanceDTO;
 import com.bankingsystem.dto.ThirdPartyDTO;
 import com.bankingsystem.model.*;
 import com.bankingsystem.repository.*;
 import com.bankingsystem.service.interfaces.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
@@ -35,11 +29,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     private PasswordEncoder passwordEncoder;
     @Override
     public BalanceDTO checkBalance(Long accountId) {
-        BalanceDTO dto = new BalanceDTO();
+        BalanceDTO dto = new BalanceDTO(); // to be returned at the end of this function
         Optional<Savings> optionalSavings = savingsRepository.findById(accountId);
         Optional<Checking> optionalChecking = checkingRepository.findById(accountId);
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(accountId);
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(accountId);
+        // find out the account type and set parameters to DTO
         if (optionalSavings.isPresent()){
             dto.setAccountId(optionalSavings.get().getId());
             dto.setAccountType("SAVINGS_ACCOUNT");
@@ -66,6 +61,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         Optional<Checking> optionalChecking = checkingRepository.findById(accountId);
         Optional<StudentChecking> optionalStudentChecking = studentCheckingRepository.findById(accountId);
         Optional<CreditCard> optionalCreditCard = creditCardRepository.findById(accountId);
+        // find out the account type and set balance new value, then persist it
         if (optionalSavings.isPresent()){
             optionalSavings.get().setBalance(new Money(balanceDTO.getAmount()));
             savingsRepository.save(optionalSavings.get());
@@ -83,10 +79,16 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
+        // create a new ThirdParty and encode the key attribute, then persist it
         ThirdParty newThirdParty = new ThirdParty(passwordEncoder.encode(thirdPartyDTO.getKey()), thirdPartyDTO.getName());
         thirdPartyRepository.save(newThirdParty);
         return newThirdParty;
     }
+    @Override
+    public void deleteThirdParty(Long id){
+        thirdPartyRepository.deleteById(id);
+    }
+
 //    @Override
 //    public Map<Long, AccountDTO> findAllAccounts() {
 //        Map<Long, AccountDTO> dtoMap = new HashMap<>();

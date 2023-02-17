@@ -15,4 +15,5 @@ public interface AdministratorController {
     BalanceDTO checkBalance(Long accountId);
     void updateBalance(Long accountId, BalanceDTO balanceDTO);
     ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException;
+    void deleteThirdParty(Long id);
 }

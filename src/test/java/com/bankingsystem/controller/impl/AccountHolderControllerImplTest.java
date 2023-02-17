@@ -16,8 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class AccountHolderControllerImplTest {
     @Autowired
     private UserRepository userRepository;

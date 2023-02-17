@@ -31,7 +31,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
     @Override
     public List<BalanceDTO> checkBalance(Long accountHolderId) {
         BalanceDTO balanceDTO;
-        List<BalanceDTO> dtos = new ArrayList<>();
+        List<BalanceDTO> dtos = new ArrayList<>(); // to be returned
         Optional<AccountHolder> optionalAccountHolder = accountHolderRepository.findById(accountHolderId);
         List<Savings> optionalSavings = savingsRepository.findByPrimaryOwner(accountHolderId);
         List<Checking> optionalChecking = checkingRepository.findByPrimaryOwner(accountHolderId);
@@ -85,10 +85,12 @@ public class AccountHolderServiceImpl implements AccountHolderService {
     @Override
     public void transfer(Long accountHolderId, Long accountId, String amount, Optional<String> beneficiaryName, Optional<Long> beneficiaryAccountId) {
         BigDecimal amountBigDecimal = new BigDecimal(amount);
+        // Needed when searching by beneficiary accountId
         Optional<Savings> optionalSavingsBeneficiary;
         Optional<Checking> optionalCheckingBeneficiary;
         Optional<StudentChecking> optionalStudentCheckingBeneficiary;
         Optional<CreditCard> optionalCreditCardBeneficiary;
+        // Needed when searching by beneficiary name
         List<Savings> savingsBeneficiaryList;
         List<Checking> checkingBeneficiaryList;
         List<StudentChecking> studentCheckingBeneficiaryList;
@@ -99,33 +101,29 @@ public class AccountHolderServiceImpl implements AccountHolderService {
         Optional<StudentChecking> optionalStudentCheckingSender = studentCheckingRepository.findById(accountId);
         Optional<CreditCard> optionalCreditCardSender = creditCardRepository.findById(accountId);
         //if it has balance > amount to be sent, subtract amount from sender balance
-        if (optionalSavingsSender.isPresent() && optionalSavingsSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0){
+        if (optionalSavingsSender.isPresent() && optionalSavingsSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0) {
             optionalSavingsSender.get().setBalance(new Money(optionalSavingsSender.get().getBalance().getAmount().subtract(amountBigDecimal)));
             savingsRepository.save(optionalSavingsSender.get());
-        }
-        else if (optionalCheckingSender.isPresent() && optionalCheckingSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0){
+        } else if (optionalCheckingSender.isPresent() && optionalCheckingSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0) {
             optionalCheckingSender.get().setBalance(new Money(optionalCheckingSender.get().getBalance().getAmount().subtract(amountBigDecimal)));
             checkingRepository.save(optionalCheckingSender.get());
-        }
-        else if (optionalStudentCheckingSender.isPresent() && optionalStudentCheckingSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0){
+        } else if (optionalStudentCheckingSender.isPresent() && optionalStudentCheckingSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0) {
             optionalStudentCheckingSender.get().setBalance(new Money(optionalStudentCheckingSender.get().getBalance().getAmount().subtract(amountBigDecimal)));
             studentCheckingRepository.save(optionalStudentCheckingSender.get());
-        }
-        else if (optionalCreditCardSender.isPresent() && optionalCreditCardSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0){
+        } else if (optionalCreditCardSender.isPresent() && optionalCreditCardSender.get().getBalance().getAmount().compareTo(amountBigDecimal) > 0) {
             optionalCreditCardSender.get().setBalance(new Money(optionalCreditCardSender.get().getBalance().getAmount().subtract(amountBigDecimal)));
             creditCardRepository.save(optionalCreditCardSender.get());
-        }
-        else {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sender's account not found");
         }
-
-        if (beneficiaryAccountId.isPresent()){ // find out beneficiary's account type by accountId
+        // find out beneficiary's account type by accountId
+        if (beneficiaryAccountId.isPresent()) {
             optionalSavingsBeneficiary = savingsRepository.findById(beneficiaryAccountId.get());
             optionalCheckingBeneficiary = checkingRepository.findById(beneficiaryAccountId.get());
             optionalStudentCheckingBeneficiary = studentCheckingRepository.findById(beneficiaryAccountId.get());
             optionalCreditCardBeneficiary = creditCardRepository.findById(beneficiaryAccountId.get());
             // then add the amount to the account
-            if (optionalSavingsBeneficiary.isPresent()){
+            if (optionalSavingsBeneficiary.isPresent()) {
                 optionalSavingsBeneficiary.get().setBalance(new Money(optionalSavingsBeneficiary.get().getBalance().getAmount().add(amountBigDecimal)));
                 savingsRepository.save(optionalSavingsBeneficiary.get());
             } else if (optionalCheckingBeneficiary.isPresent()) {
@@ -138,13 +136,15 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 optionalCreditCardBeneficiary.get().setBalance(new Money(optionalCreditCardBeneficiary.get().getBalance().getAmount().add(amountBigDecimal)));
                 creditCardRepository.save(optionalCreditCardBeneficiary.get());
             }
-        }  else if (beneficiaryName.isPresent()){ // find out beneficiary's account type by accountHolder name
+        }
+        // find out beneficiary's account type by accountHolder name
+        else if (beneficiaryName.isPresent()) {
             savingsBeneficiaryList = savingsRepository.findByPrimaryOwnerName(beneficiaryName.get());
             checkingBeneficiaryList = checkingRepository.findByPrimaryOwnerName(beneficiaryName.get());
             studentCheckingBeneficiaryList = studentCheckingRepository.findByPrimaryOwnerName(beneficiaryName.get());
             creditCardBeneficiaryList = creditCardRepository.findByPrimaryOwnerName(beneficiaryName.get());
             // then add the amount to the first account
-            if (savingsBeneficiaryList.size() > 0){
+            if (savingsBeneficiaryList.size() > 0) {
                 savingsBeneficiaryList.get(0).setBalance(new Money(savingsBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 savingsRepository.save(savingsBeneficiaryList.get(0));
             } else if (checkingBeneficiaryList.size() > 0) {
@@ -157,7 +157,7 @@ public class AccountHolderServiceImpl implements AccountHolderService {
                 creditCardBeneficiaryList.get(0).setBalance(new Money(creditCardBeneficiaryList.get(0).getBalance().getAmount().add(amountBigDecimal)));
                 creditCardRepository.save(creditCardBeneficiaryList.get(0));
             }
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beneficiary's account not found");
         }
     }

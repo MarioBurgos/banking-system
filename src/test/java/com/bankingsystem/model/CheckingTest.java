@@ -1,7 +1,6 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +17,6 @@ class CheckingTest {
         balanceLessThanMinimum = new BigDecimal("100");
         checkingAccount = new Checking(new Money(initialBalance), null, null, null );
     }
-//
-//    @AfterEach
-//    void tearDown() {
-//    }
 
     @Test
     void setBalance_BalanceIsLessThanMinimumBalance_PenaltyFeeIsApplied() {

@@ -1,6 +1,5 @@
 package com.bankingsystem.controller.impl;
 
-import com.bankingsystem.classes.Money;
 import com.bankingsystem.controller.interfaces.AccountHolderController;
 import com.bankingsystem.dto.BalanceDTO;
 import com.bankingsystem.service.interfaces.AccountHolderService;

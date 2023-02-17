@@ -1,9 +1,7 @@
 package com.bankingsystem.model;
 
 import com.bankingsystem.classes.Money;
-import com.bankingsystem.enums.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -37,7 +35,6 @@ public abstract class Account {
         penaltyFee = new BigDecimal("40");
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
-
     }
 
     public Long getId() {

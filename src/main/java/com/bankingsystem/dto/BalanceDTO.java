@@ -1,7 +1,5 @@
 package com.bankingsystem.dto;
 
-import com.bankingsystem.classes.Money;
-
 import java.math.BigDecimal;
 
 public class BalanceDTO {
