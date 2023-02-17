@@ -1,6 +1,7 @@
 package com.bankingsystem.controller.impl;
 
 import com.bankingsystem.controller.interfaces.UserController;
+import com.bankingsystem.dto.UserDTO;
 import com.bankingsystem.model.User;
 import com.bankingsystem.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class UserControllerImpl implements UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.getUsers();
     }
 
@@ -25,4 +26,6 @@ public class UserControllerImpl implements UserController {
     public void saveUser(@RequestBody User user) {
         userService.saveUser(user);
     }
+
+
 }

@@ -39,7 +39,7 @@ public class AdministratorControllerImpl implements AdministratorController {
 
     @PostMapping("/thirdparty")
     @ResponseStatus(HttpStatus.CREATED)
-    public ThirdParty addThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
+    public ThirdParty addThirdParty(@RequestBody @Valid ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
         return administratorService.addThirdParty(thirdPartyDTO);
     }
 }

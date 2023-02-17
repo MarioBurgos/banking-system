@@ -10,6 +10,7 @@ import com.bankingsystem.repository.*;
 import com.bankingsystem.service.interfaces.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,6 +31,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     private CreditCardRepository creditCardRepository;
     @Autowired
     private ThirdPartyRepository thirdPartyRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public BalanceDTO checkBalance(Long accountId) {
         BalanceDTO dto = new BalanceDTO();
@@ -80,10 +83,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public ThirdParty addThirdParty(ThirdPartyDTO thirdPartyDTO) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-//        byte[] hashedName = digest.digest(thirdPartyDTO.getName().getBytes(StandardCharsets.UTF_8));
-        byte[] hashedKey = digest.digest(thirdPartyDTO.getKey().getBytes(StandardCharsets.UTF_8));
-        ThirdParty newThirdParty = new ThirdParty(hashedKey.toString(), thirdPartyDTO.getName());
+        ThirdParty newThirdParty = new ThirdParty(passwordEncoder.encode(thirdPartyDTO.getKey()), thirdPartyDTO.getName());
         thirdPartyRepository.save(newThirdParty);
         return newThirdParty;
     }
