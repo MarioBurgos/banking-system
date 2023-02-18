@@ -24,3 +24,5 @@ Each one of the accounts have a penalty fee that is deducted from the balance au
 __Database Diagram:__
 
 <img src="/src/main/resources/static/db_diagram.JPG" alt="database diagram" title="Database diagram" style="display:inline-block; margin: 0 auto;">
+
+It can be seen here that the two entities _User_ and _Role_ are independent of _BankingUser,_ and they shouldn't be.  I will need more time to think how implement them correctly, because the main User class (_BankingUser_) it's an _abstract_ entity, and it brought me trouble.  If the deadline wasn't so close I'm sure I would have sorted it out.
