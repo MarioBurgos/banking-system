@@ -4,7 +4,7 @@ This is the final project from Ironhack's Java Development Bootcamp.  It's an AP
 
 The main entity models are _User_ and _Account_, that are implemented as _abstract_ entities.
 
-The son entities of _User_ are _AccountHolder_, _Administrator_ and _ThirdParty_, each one with them own caracteristics.
+The son entities of _User_ are _AccountHolder_, _Administrator_ and _ThirdParty_, each one with them own characteristics.
 
 On the side of _Account_, there are the son entities that extend the properties of the superclass:  _Checking_, _StudentChecking_, _Savings_ and _CreditCard_.
 
